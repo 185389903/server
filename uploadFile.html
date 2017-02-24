@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>server2.js</title>
+	<style>
+	.success{
+		color:green;
+	}
+	</style>
+</head>
+<body>
+	<form action="/uploadFile" method="post" enctype="multipart/form-data">
+		<input type="file" name="image" size="50" multiple="multiple" />
+		<br />
+		<input type="submit" value="上传文件" />
+		<img src="/img/loadingGif.gif" alt="">
+	</form>
+	<script src="/zepto.min.js"></script>
+	<script>
+	$.ajax({
+		url:"/data",
+		type:"post",
+		dataType:"json",
+		data:{},
+		success:function(res){
+			console.dir(res);
+		}
+	});
+	</script>
+</body>
+</html>

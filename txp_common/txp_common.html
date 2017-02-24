@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>txp_common</title>
+    <style type="text/css">
+        .txp-active,.txp-pagingPrev{
+            border:1px solid #dedede;
+        }
+    </style>
+</head>
+<body>
+    <button class="cli">发送请求</button>
+    <div id="paging-id"></div>
+    <script type="text/javascript" src="zepto.min.js"></script>
+	<script src="txp_common.js"></script>
+	<script>
+         var menulist2 = {
+             "data": [
+                 { "MID": "M001", "name": "首页", "Url": "#", "children": "" },
+                 { "MID": "M002", "name": "车辆买卖", "Url": "#", "children":
+                     [
+                          { "MID": "M003", "name": "新车", "Url": "#", "children":
+                             [
+                                 { "MID": "M006", "name": "奥迪", "Url": "#", "children": "" },
+                                 { "MID": "M007", "name": "别克", "Url": "#", "children": "" }
+                             ]
+                          },
+                          { "MID": "M004", "name": "二手车", "Url": "#", "children": "" },
+                          { "MID": "M005", "name": "改装车", "Url": "#", "children": "" }
+                     ]
+                 },
+                 { "MID": "M006", "name": "宠物", "Url": "#", "children": "","link":"http://www.baidu.com"},
+                 { "MID": "M006", "name": "宠物1", "Url": "#", "children": "" },
+                 { "MID": "M006", "name": "宠物2", "Url": "#", "children": "" },
+                 { "MID": "M007", "name": "宠物3", "Url": "#", "children": "" }
+           ]
+         };
+         var el=txp_common.tree(menulist2.data,{
+         	treeParentClass:"treeParentClass",
+         	treeUlClass:"treeUlClass",
+         	treeLiClass:"treeLiClass",
+         	levelNumber:2
+         });
+         
+         txp_common.getClass("cli")[0].onclick=function(){
+            var tipStateDiv;
+            var data=txp_common.ajax({
+                url:"./ajax.json",
+                async:false,
+                httpAfter:function(res){
+                    tipStateDiv=txp_common.tip({
+                        text:"请求中",
+                        type:"loading",
+                        seep:0
+                     });
+                },
+                httpBefore:function(res){
+                    txp_common.tip({
+                        text:"请求成功！",
+                        type:"loading",
+                        seep:6000
+                     });
+                }
+            });
+            console.log(data);
+         };
+
+         var page=txp_common.paging({
+            total:30,
+            pageSize:9,
+            activeIndex:6,
+            activeClick:function(res){
+                console.log(res);
+            },
+            prevCallback:function(res){
+
+            },
+            nextCallback:function(res){
+
+            }
+         });
+         txp_common.getId("paging-id").appendChild(page);
+         console.log(page);
+	</script>
+    <style>
+        .error{padding-top:62px;text-align:center;}
+        .error p{
+            margin-top:10px;
+        }
+        .reload{margin-top:6px;}
+    </style>
+    <div class="error">
+        <img src="{{ asset('assets/img/CourseTreasure/nonet.png') }}">
+        <p>轻轻地，我来到你的世界，异常网络让我迷失；</p>
+        <p>其实，我一直在那里，不离不弃；</p>
+        <p>若你，愿与我相见，请检查网络或尝试点击</p>
+        <img class="reload" src="{{ asset('assets/img/CourseTreasure/reload.png') }}" onclick="window.location.reload()">
+    </div>
+    <script type="text/javascript">
+        $.fn.alert=function(){
+            console.log(this);
+            alert("ff");
+        };
+        $(".error").alert();
+    </script>
+</body>
+</html>

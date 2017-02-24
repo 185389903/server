@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>js根据json生成无限分级菜单例子</title>
+</head>
+<body>
+    <a href="https://www.xiaoweiba8.com/">返回首页</a>
+    <h1>js根据json生成无限分级菜单例子</h1>
+    <div id="paging-id"></div>
+	<script type="text/javascript">
+     ;(function(){
+        var txp_common={
+            options:{
+                treeOptions:{
+
+                }
+            },
+            // 初始化方法
+            init:function(){
+                var ts=this;
+            },
+            // 创建元素
+            cEle:function(el){
+                return document.createElement(el);
+            },
+            // 创建文本
+            cText:function(text){
+                return document.createTextNode(text);
+            },
+            // 合并对象
+            extend:function(o,n){
+                if(!o || !n){
+                    return {"msg":"对象合并出错！"};
+                }
+                for (var p in n){
+                    if(n.hasOwnProperty(p))
+                        o[p]=n[p];
+                }
+                return o;
+            },
+           
+            // 获取id
+            getId:function(id){
+                return document.getElementById(id);
+            },
+
+            // 菜单树
+            tree:function(data,param){
+                if(!data){
+                    return '请传json数据参数！';
+                }
+                var ts=this;
+                var options={
+                    treeParentClass:"tree-parent-class",
+                    treeUlClass:"tree-ul-class",
+                    treeLiClass:"tree-li-class",
+                    treeAlink:"http://www.xiaoweiba8.com"
+                };
+                
+                var treeSetting=ts.options.treeOptions;
+                if(param){
+                    options=ts.extend(options,param);
+                }
+                treeSetting.parent=ts.cEle("ul");
+                treeSetting.parent.setAttribute("class",options.treeParentClass);
+                // 结构处理
+                return ts.treeController(data,treeSetting.parent,options);
+            },
+            treeController:function(data,parent,options){
+                var calleeFn=arguments.callee;
+                var ts=this;
+                var treeSetting=ts.options.treeOptions;
+                for(var key in data){
+                     if (data[key].children.length > 0) {
+                        // if(options.)
+                        treeSetting.child = ts.cEle("li");
+                        treeSetting.child.setAttribute("class",options.treeLiClass);
+                        // 创建文本节点
+                        var textnode=ts.cText(data[key].name);
+                        var el_;
+                        if(data[key].link){
+                            var el_=ts.cEle("a");
+                            el_.setAttribute("href","javascript:void(0)");
+                        }else{
+                            var el_=ts.cEle("span");
+                        }
+                        
+                        
+                        var ulnode=ts.cEle("ul");
+                        ulnode.setAttribute("class",options.treeUlClass);
+                        el_.appendChild(textnode);
+                        treeSetting.child.appendChild(el_);
+                        treeSetting.child.appendChild(ulnode);
+                        parent.appendChild(treeSetting.child);
+
+                        ts.treeController(data[key].children,treeSetting.child.lastChild,options);
+                     }else{
+                        var li=ts.cEle("li");
+                        var a=ts.cEle("a");
+                        if(data[key].link){
+                            a.setAttribute("href",data[key].link);
+                        }
+                        else{
+                            a.setAttribute("href",options.treeAlink);
+                        }
+                        li.setAttribute("class",options.treeLiClass);
+                        var text=ts.cText(data[key].name);
+                        a.appendChild(text);
+                        li.appendChild(a);
+                        parent.appendChild(li);
+                     }
+                }
+                return parent;
+            }
+        };
+        window.txp_common=txp_common;
+    })(window,document);   
+    </script>
+	<script>
+          var json = {
+             "data": [
+                 { "name": "爸爸", "children": "" },
+                 { "name": "爸爸", "children":
+                     [
+                          { "name": "儿子", "children":
+                             [
+                                 { "name": "孙子", "children": "" },
+                                 { "name": "孙女", "children": "" }
+                             ]
+                          },
+                          { "name": "儿子", "children": "" },
+                          { "name": "儿子", "children": "" }
+                     ]
+                 },
+                 {  "name": "妈妈", "children": "","link":"http://www.baidu.com"},
+                 {  "name": "叔叔", "children": "" },
+                 { "name": "阿姨", "children": "" },
+           ]
+         };
+         var el=txp_common.tree(json.data,{
+         	treeParentClass:"treeParentClass",
+         	treeUlClass:"treeUlClass",
+         	treeLiClass:"treeLiClass",
+         	levelNumber:2
+         });
+ 
+         txp_common.getId("paging-id").appendChild(el);
+	</script>
+</body>
+</html>

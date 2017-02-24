@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>锤子</title>
+	<style>
+		.chuiDiv{
+			position: absolute;top:-99990px;left:0px;width:85px;height:73px;
+		}
+		.chuiDiv .rotateImg,.chuiDiv .rotateImg40{
+			-webkit-transform:rotate(40deg);
+		}
+		.chuiDiv .rotateImg40{
+			-webkit-animation:rotateChange 0.5s ease-in;
+			-webkit-animation-fill-mode:forwards;
+		}
+		@-webkit-keyframes rotateChange{
+			0%  {-webkit-transform:rotate(40deg);}
+			20% {-webkit-transform:rotate(35deg);}
+			30% {-webkit-transform:rotate(25deg);}
+			40% {-webkit-transform:rotate(10deg);}
+			50% {-webkit-transform:rotate(0deg);}
+			60% {-webkit-transform:rotate(20deg);}
+			80% {-webkit-transform:rotate(0deg);}
+			90% {-webkit-transform:rotate(5deg);}
+			100%{-webkit-transform:rotate(0deg);}
+		}
+	</style>
+</head>
+<body>
+	<div class="chuiDiv">
+		<img src="./cui.png" width="85" height="73" alt="锤子" class="rotateImgPosition rotateImg">	
+	</div>
+	<script src="zepto.min.js"></script>
+	<script>
+		$(document).click(function(e){
+			var el=$(".chuiDiv");
+			var x=e.pageX;
+			var y=e.pageY;
+			var let=85/2;
+			var top=73/2;
+			el.css({"top":(y-top)+"px","left":(x-let)+"px"});
+			el.find(".rotateImg").addClass("rotateImg40");
+			setTimeout(function(){
+				el.css({"top":"-99990px","left":"0px"});
+				el.find(".rotateImg").removeClass("rotateImg40");
+			},800);
+		});
+	</script>
+</body>
+</html>

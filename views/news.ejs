@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>server2.js</title>
+	<style>
+	.success{
+		color:green;
+	}
+	</style>
+</head>
+<body>
+	<%include header.ejs %>
+	<%=title  %>
+	<%=urlData  %>
+	<% if(items.length){ %>
+		<ul>
+			<% items.forEach(function(obj){ %>
+				<li><%=obj.title %></li>
+			<% }) %>
+		</ul>
+	<% } %>
+	<%include footer.ejs %>
+	<script src="/zepto.min.js"></script>
+	<script>
+		$("body").append("<div>Div</div>");
+	</script>
+</body>
+</html>

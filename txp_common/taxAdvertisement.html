@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<title>涉税风险广告</title>
+	<style type="text/css">
+		*{
+			margin:0px;padding:0px;
+		}
+		.tax-advertisement{
+			height:588px;width:100%;overflow:hidden;
+			background:url("tax-bg.png") no-repeat center center;
+		}
+		.tax-advertisementBox{
+			width:1116px;margin:auto;height:588px;
+		}
+		.tax-header{
+			height:500px;overflow:hidden;
+		}
+		.tax-tel{
+			width:251px;height:36px;background:url("tel.png") no-repeat;
+			line-height: 40px;color:#131313;font-size:14px;margin-top:24px;
+			margin-left:9px;
+		}
+		.tax-tel span{
+			padding-left:41px;
+		}
+		.tax-footer{
+			height:88px;
+		}
+		.tax-form{
+			padding-top: 19px;
+		}
+
+		.tax-tel-input{
+			width:286px;height:48px;line-height:48px;padding:0 17px;
+			border-radius:5px;background-color:#fff;border:0;outline: 0;
+			font-size:16px;color:#999999;
+		}
+		.tel-submit{
+			display:inline-block;height:48px;width:160px;background-color:#f8e545;color:#333333;font-size:16px;
+			text-align: center;line-height: 48px;text-decoration: none;border-radius:5px;margin-left:15px;
+		}
+		.tax-tipSuccess{
+			position:fixed;z-index:999;left:0px;top:0px;width:100%;bottom:0px;
+			background:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADAQMAAABs5if8AAAAA1BMVEUAAACnej3aAAAAAXRSTlOArV5bRgAAAApJREFUeF5jAAMAAAYAAdS1GSgAAAAASUVORK5CYII=");
+		}
+		.tax-tipTextBox{
+			width:400px;height:260px;background-color:#fff;border-radius:5px;text-align:center;
+			position: absolute;left: 50%;top:50%;margin-left:-200px;margin-top:-130px;
+		}
+		.ino{
+			display:inline-block;width:120px;height:32px;background-color:#f8e545;font-size:14px;
+			color:#333333;line-height:32px;text-decoration: none;border-radius:5px;
+		}
+		.subg{
+			margin-top:18px;
+		}
+		.tax-suP,.tax-suP2{
+			margin-top:16px;color:#333333;font-size:16px;
+		}
+		.tax-suP2{
+			line-height: 30px;margin-top:15px;margin-bottom:15px;color:#999999;
+			font-size:14px;
+		}
+		.tax-close{
+			display:block;width:40px;height:40px;position: absolute;right:0px;top:0px;
+			background:url("tax-close.png") no-repeat center center;cursor: pointer;
+		}
+		.hide{
+			display:none;
+		}
+	</style>
+</head>
+<body>
+	<input type="hidden" name="city" class="city" value="">
+	<input type="hidden" name="UnitNumber" class="UnitNumber" value="">
+	<input type="hidden" name="UnitName" class="UnitName" value="">
+	<input type="hidden" name="isExhibition" class="isExhibition" value="1">
+	<div class="tax-advertisement">
+		<div class="tax-advertisementBox">
+			<div class="tax-header">
+				<div class="tax-tel"><span>详情咨询：4007-123-123</span></div>
+			</div>
+			<div class="tax-footer">
+				<div class="tax-form">
+					<input type="text" onFocus="tax.onFocus(this)" onBlur="tax.onBlur(this)" name="tel" class="tax-tel-input" id="tax-tel-input" maxlength="11" data-value="请输入你的手机号码" value="请输入你的手机号码"><a href="javascript:;" class="tel-submit">获取详细信息</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tax-tipSuccess hide" id="tax-tipSuccess">
+		<div class="tax-tipTextBox">
+			<img src="tax-su.png" class="subg">
+			<p class="tax-suP">试用申请成功！</p>
+			<p class="tax-suP2">工作人员稍后将联系您，<br>提供工具软件下载地址并指导使用</p>
+			<a href="javascript:;" class="ino">知道了</a>
+			<span class="tax-close"></span>
+		</div>
+	</div>
+	<script type="text/javascript" src="txp_common.js"></script>
+	<script type="text/javascript">
+		var isExhibition=txp_common.getClass("isExhibition")[0];
+		var tax_header=txp_common.getClass("tax-tel")[0];
+		var tax_footer=txp_common.getClass("tax-footer")[0];
+		var isExhibition_val=isExhibition.value;
+		if(isExhibition_val==1){
+			tax_header.style.display="none";
+		}else{
+			tax_footer.style.display="none";
+		}
+		var tax={
+			init:function(){
+				var ts=this;
+				// 提交信息
+				ts.taxSubmit();
+
+				// 关闭弹框
+				ts.closeTax();
+			},
+			taxSubmit:function(){
+				var ts=this;
+				var data=txp_common.getUrlData();
+				var btn=txp_common.getClass("tel-submit")[0];
+				ts.clickBoll=true;
+				if(ts.clickBoll){
+					ts.clickBoll=false;
+					btn.onclick=ts.submitData;
+				}
+			},
+			submitData:function(){
+				var ts=this;
+				//var urlData=txp_common.getUrlData();
+				var city=txp_common.getClass("city")[0];
+				var UnitNumber=txp_common.getClass("UnitNumber")[0];
+				var UnitName=txp_common.getClass("UnitName")[0];
+				var urlData={
+					city:city.value,
+					UnitNumber:UnitNumber.value,
+					UnitName:UnitName.value
+				};
+				var inputId=txp_common.getId("tax-tel-input");
+				var inputVal=inputId.value;
+				if(inputVal==inputId.getAttribute("data-value") || inputVal==""){
+					txp_common.tip({
+						text:"手机号不能为空！",
+						type:"text",
+						seep:2000
+					});
+					return false;
+				}
+				if(!txp_common.isTel(inputVal)){
+					txp_common.tip({
+						text:"手机格式错误！",
+						type:"text",
+						seep:2000
+					});
+					return false;
+				}
+				txp_common.ajax({
+					data:txp_common.extend(urlData,{
+						mobile:"15700180779",
+					}),
+					url:"ajax.json",
+					success:function(res){
+						ts.clickBoll=true;
+						txp_common.tip({
+							text:"",
+							type:"text",
+							seep:-1
+						});
+						var elId=txp_common.getId("tax-tipSuccess");
+						txp_common.removeClass(elId,"hide");
+					},
+					error:function(err){
+						ts.clickBoll=true;
+						txp_common.tip({
+							text:"请求服务器出错！提交数据失败！",
+							type:"text",
+							seep:4000
+						});
+					},
+					httpAfter:function(){
+						txp_common.tip({
+							text:"数据提交中..."
+						});
+					}
+				});
+			},
+			closeTax:function(){
+				var ts=this;
+				var closeClass=txp_common.getClass("tax-close")[0];
+				var closeClass2=txp_common.getClass("ino")[0];
+				closeClass.onclick=function(){
+					ts.taxModalClose();
+				};
+				closeClass2.onclick=function(){
+					ts.taxModalClose();
+				};
+				
+			},
+			taxModalClose:function(){
+				var elId=txp_common.getId("tax-tipSuccess");
+				txp_common.addClass(elId,"hide");
+			},
+			onFocus:function(ts){
+				var ts=ts;
+				var dataVal=ts.getAttribute("data-value");
+				var val=ts.value;
+				if(val==dataVal){
+					ts.value='';
+					ts.style.color="#000";
+				}
+			},
+			onBlur:function(ts){
+				var ts=ts;
+				var dataVal=ts.getAttribute("data-value");
+				var val=ts.value;
+				if(val=="" || val==dataVal){
+					ts.value=dataVal;
+					ts.style.color="#999999";
+				}
+			}
+		};
+		tax.init();
+	</script>
+</body>
+</html>
